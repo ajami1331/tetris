@@ -1,0 +1,7 @@
+build
+cmake-build-debug
+build-wasm-web
+build-i686-windows
+build-x86_64-windows
+.idea
+.vscode
