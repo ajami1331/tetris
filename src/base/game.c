@@ -95,14 +95,15 @@ void game_terminate(void)
     {
         game_terminate_dynamic();
     }
-#ifdef DEBUG_MODE
-#ifdef _WIN32
     if (handle)
     {
+#ifdef _WIN32
         FreeLibrary(handle);
-    }
 #endif // _WIN32
-#endif // DEBUG_MODE
+#if __linux__ || __APPLE__
+        dlclose(handle);
+#endif // __linux__ || __APPLE__
+    }
 }
 
 int game_should_continue(void)
