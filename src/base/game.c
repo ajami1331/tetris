@@ -59,7 +59,7 @@ void game_tick(float delta_time)
     }
 #ifdef DEBUG_MODE
 #ifdef _WIN32
-    if (GetFileModTime("fl") != last_dll_write_time)
+    if (GetFileModTime("fl") > 10 + last_dll_write_time)
     {
         unload_game_code();
         game_load_code();

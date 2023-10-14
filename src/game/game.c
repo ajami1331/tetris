@@ -19,8 +19,6 @@ void game_tick(float delta_time)
     ClearBackground(RAYWHITE);
 
     DrawText("Hello World!", 190, 200, 20, LIGHTGRAY);
-    DrawText("Jami", 230, 240, 20, LIGHTGRAY);
-    DrawText("Keisa", 260, 260, 20, LIGHTGRAY);
     
     draw_game_area_border();
 

@@ -48,8 +48,6 @@ else ()
 endif()
 
 if (MSVC)
-  add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-                    COMMAND ${CMAKE_COMMAND} -E touch -f $<TARGET_FILE_DIR:${PROJECT_NAME}>/fl)
   add_compile_definitions(LOG_LEVEL=LOG_DEBUG)
   add_compile_definitions(DEBUG_MODE)
 endif()

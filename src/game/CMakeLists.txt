@@ -27,12 +27,12 @@ target_link_libraries(game raylib)
 if (MSVC)
   add_custom_command(TARGET game POST_BUILD
                     COMMAND ${CMAKE_COMMAND} -E touch -f $<TARGET_FILE_DIR:game>/fl)
-  add_custom_command(TARGET game POST_BUILD
-                    COMMAND ${CMAKE_COMMAND} -E touch ${CMAKE_CURRENT_SOURCE_DIR}/CMakeLists.txt)
   add_compile_definitions(LOG_LEVEL=LOG_DEBUG)
   add_compile_definitions(DEBUG_MODE)
   string(RANDOM LENGTH 10 ALPHABET 0123456789 PROJECT_ID)
   set_target_properties(game PROPERTIES COMPILE_PDB_NAME game-${PROJECT_ID})
   set_target_properties(game PROPERTIES PDB_NAME game-${PROJECT_ID}-1)
   message(STATUS "PDB file name: game-${PROJECT_ID}.pdb")
+  add_custom_command(TARGET game POST_BUILD
+                    COMMAND ${CMAKE_COMMAND} -E touch ${CMAKE_CURRENT_SOURCE_DIR}/CMakeLists.txt)
 endif()
