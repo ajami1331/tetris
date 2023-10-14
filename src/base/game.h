@@ -5,6 +5,7 @@
 void game_load_code(void);
 void game_init(void);
 void game_tick(float delta_time);
+int game_should_continue(void);
 void game_terminate(void);
 
 #endif // GAME_H

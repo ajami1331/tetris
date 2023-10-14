@@ -8,6 +8,11 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
+if (CMAKE_COMPILER_IS_GNUCC)
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
+  message(STATUS "CMAKE_C_FLAGS: ${CMAKE_C_FLAGS}")
+endif()
+
 add_subdirectory(src/game)
 
 # Dependencies
@@ -43,6 +48,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR} src/shared)
 
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
   add_compile_definitions(LOG_LEVEL=LOG_DEBUG)
+  add_compile_definitions(DEBUG_MODE)
 else ()
   add_compile_definitions(LOG_LEVEL=LOG_INFO)
 endif()
