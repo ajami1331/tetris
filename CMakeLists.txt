@@ -1,12 +1,14 @@
 cmake_minimum_required(VERSION 3.11) # FetchContent is available in 3.11+
-project(raylib-cmake-c-starter VERSION 0.1.0 LANGUAGES C)
+project(tetris VERSION 0.1.0 LANGUAGES C)
 
 # Generate compile_commands.json
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
+add_subdirectory(src/game)
 
 # Dependencies
 set(RAYLIB_VERSION 4.5.0)
@@ -27,7 +29,7 @@ if (NOT raylib_FOUND) # If there's none, fetch and build raylib
 endif()
 
 # Our Project
-file(GLOB_RECURSE SOURCES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} src/*)
+file(GLOB_RECURSE SOURCES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} src/base/*)
 add_executable(${PROJECT_NAME} ${SOURCES})
 #set(raylib_VERBOSE 1)
 target_link_libraries(${PROJECT_NAME} raylib)
@@ -37,10 +39,19 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
                    COMMAND ${CMAKE_COMMAND} -E copy_directory
                        ${CMAKE_SOURCE_DIR}/assets/ $<TARGET_FILE_DIR:${PROJECT_NAME}>/assets )
 
+include_directories(${CMAKE_CURRENT_SOURCE_DIR} src/shared)
+
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
   add_compile_definitions(LOG_LEVEL=LOG_DEBUG)
 else ()
   add_compile_definitions(LOG_LEVEL=LOG_INFO)
+endif()
+
+if (MSVC)
+  add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+                    COMMAND ${CMAKE_COMMAND} -E touch -f $<TARGET_FILE_DIR:${PROJECT_NAME}>/fl)
+  add_compile_definitions(LOG_LEVEL=LOG_DEBUG)
+  add_compile_definitions(DEBUG_MODE)
 endif()
 
 # Web Configurations
@@ -59,7 +70,7 @@ else()
   endif()
 endif()
 
-if (NOT CMAKE_BUILD_TYPE STREQUAL "Debug")
+if (NOT CMAKE_BUILD_TYPE STREQUAL "Debug" AND NOT MSVC)
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3 -static")
 endif()
 
