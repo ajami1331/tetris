@@ -4,7 +4,7 @@
 
 void game_load_code(void);
 void game_init(void);
-void game_tick();
+void game_tick(void);
 int game_should_continue(void);
 void game_shutdown(void);
 

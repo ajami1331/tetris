@@ -85,7 +85,7 @@ void game_init(void)
     game_code->init();
 }
 
-void game_tick()
+void game_tick(void)
 {
     game_code->tick();
 #if _DEBUG || DEBUG_MODE

@@ -5,7 +5,7 @@
 
 EXPORT_FUNC game_code_t* game_get_code(void);
 EXPORT_FUNC void game_init(void);
-EXPORT_FUNC void game_tick();
+EXPORT_FUNC void game_tick(void);
 EXPORT_FUNC void game_shutdown(void);
 EXPORT_FUNC void game_load_code(void);
 EXPORT_FUNC void game_unload_code(void);
