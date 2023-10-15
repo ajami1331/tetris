@@ -4,7 +4,7 @@
 
 void game_load_code(void);
 void game_init(void);
-void game_tick(float delta_time);
+void game_tick();
 int game_should_continue(void);
 void game_shutdown(void);
 

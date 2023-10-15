@@ -33,8 +33,13 @@ if (NOT raylib_FOUND) # If there's none, fetch and build raylib
 endif()
 
 # Our Project
-file(GLOB_RECURSE SOURCES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} src/base/*)
-add_executable(${PROJECT_NAME} ${SOURCES})
+if (NOT ${PLATFORM} STREQUAL "Web")
+  file(GLOB_RECURSE SOURCES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} src/base/*)
+  add_executable(${PROJECT_NAME} ${SOURCES})
+else()
+  file(GLOB_RECURSE SOURCES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} src/base/* src/game/*)
+  add_executable(${PROJECT_NAME} ${SOURCES})
+endif()
 #set(raylib_VERBOSE 1)
 target_link_libraries(${PROJECT_NAME} raylib)
 set_property(TARGET ${PROJECT_NAME} PROPERTY C_STANDARD 11)
@@ -84,5 +89,6 @@ if (APPLE)
     target_link_libraries(${PROJECT_NAME} "-framework OpenGL")
 endif()
 
-
-add_subdirectory(src/game)
+if (NOT ${PLATFORM} STREQUAL "Web")
+  add_subdirectory(src/game)
+endif()

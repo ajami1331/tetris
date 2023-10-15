@@ -17,11 +17,11 @@ int main(void)
     game_init();
 
 #if defined(PLATFORM_WEB)
-    emscripten_set_main_loop(tick, 0, 1);
+    emscripten_set_main_loop(game_tick, 0, 1);
 #else
     while (game_should_continue())
     {
-        game_tick(GetFrameTime());
+        game_tick();
     }
 #endif
 

@@ -12,7 +12,7 @@ void game_init(void)
     SetTargetFPS(60);
 }
 
-void game_tick(float delta_time)
+void game_tick()
 {
     BeginDrawing();
 

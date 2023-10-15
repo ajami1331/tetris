@@ -4,7 +4,7 @@
 typedef struct
 {
     void (*init)(void);
-    void (*tick)(float delta_time);
+    void (*tick)();
     void (*shutdown)(void);
     void (*load_code)(void);
     void (*unload_code)(void);
