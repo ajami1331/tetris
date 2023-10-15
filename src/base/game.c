@@ -54,7 +54,11 @@ void game_load_code(void)
 #ifdef _WIN32
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wcast-function-type"
+#ifdef __MINGW32__
+    CopyFileA("libgame.dll", "game1.dll", 0);
+#else
     CopyFile("game.dll", "game1.dll", 0);
+#endif // __MINGW32__
     handle = LoadLibraryA("game1.dll");
     last_dll_write_time = GetFileModTime("fl");
     game_init_dynamic = (game_init_t)GetProcAddress(handle, "game_init");

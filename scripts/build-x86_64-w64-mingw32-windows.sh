@@ -26,4 +26,6 @@ done
 
 cd temp
 
+cp /usr/lib/gcc/x86_64-w64-mingw32/10-win32/libgcc_s_seh-1.dll ./bin-x86_64-windows/
+
 zip -r ../releases/x86_64-windows.zip ./bin-x86_64-windows/

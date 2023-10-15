@@ -26,4 +26,6 @@ done
 
 cd temp
 
+cp /usr/lib/gcc/i686-w64-mingw32/10-win32/libgcc_s_dw2-1.dll ./bin-i686-windows/
+
 zip -r ../releases/i686-windows.zip ./bin-i686-windows/
