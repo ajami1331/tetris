@@ -6,4 +6,4 @@
 //     int block_size;
 // };
 
-#endif
+#endif // GAME_STATE_H

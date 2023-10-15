@@ -33,6 +33,18 @@ int last_dll_write_time = 0;
 #endif // __linux__ || __APPLE__
 
 #ifdef _WIN32
+#ifdef __MINGW32__
+#define GAME_CODE_LIB "libgame.dll"
+#else
+#define GAME_CODE_LIB "game.dll"
+#endif // __MINGW32__
+#elif __linux__
+#define GAME_CODE_LIB "./libgame.so"
+#elif __APPLE__
+#define GAME_CODE_LIB "./libgame.dylib"
+#endif // _WIN32
+
+#ifdef _WIN32
 
 DWORD last_dll_write_time = 0;
 
@@ -55,9 +67,9 @@ void game_load_code(void)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wcast-function-type"
 #ifdef __MINGW32__
-    CopyFileA("libgame.dll", "game1.dll", 0);
+    CopyFileA(GAME_CODE_LIB, "game1.dll", 0);
 #else
-    CopyFile("game.dll", "game1.dll", 0);
+    CopyFile(GAME_CODE_LIB, "game1.dll", 0);
 #endif // __MINGW32__
     handle = LoadLibraryA("game1.dll");
     last_dll_write_time = GetFileModTime("fl");
@@ -70,8 +82,8 @@ void game_load_code(void)
 #pragma GCC diagnostic pop
 #endif // _WIN32
 #if __linux__ || __APPLE__
-    handle = dlopen("./libgame.so", RTLD_LAZY);
-    last_dll_write_time = GetFileModTime("./libgame.so");
+    handle = dlopen(GAME_CODE_LIB, RTLD_LAZY);
+    last_dll_write_time = GetFileModTime(GAME_CODE_LIB);
     *(void **)(&game_init_dynamic) = dlsym(handle, "game_init");
     *(void **)(&game_tick_dynamic) = dlsym(handle, "game_tick");
     *(void **)(&game_terminate_dynamic) = dlsym(handle, "game_terminate");
@@ -99,7 +111,7 @@ void game_tick(float delta_time)
     {
         game_tick_dynamic(delta_time);
     }
-#if _DEBUG || NDEBUG
+#if _DEBUG || DEBUG_MODE
 #ifdef _WIN32
     if (GetFileModTime("fl") != last_dll_write_time)
     {
@@ -108,13 +120,13 @@ void game_tick(float delta_time)
     }
 #endif // _WIN32
 #if __linux__ || __APPLE__
-    if (GetFileModTime("./libgame.so") != last_dll_write_time)
+    if (GetFileModTime(GAME_CODE_LIB) != last_dll_write_time)
     {
         game_unload_code();
         game_load_code();
     }
 #endif // __linux__ || __APPLE__
-#endif // _DEBUG || NDEBUG
+#endif // _DEBUG || DEBUG_MODE
 }
 
 void game_terminate(void)

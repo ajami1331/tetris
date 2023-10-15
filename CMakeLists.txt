@@ -46,6 +46,7 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 include_directories(${CMAKE_CURRENT_SOURCE_DIR} src/shared)
 
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+  add_compile_definitions(DEBUG_MODE=1)
   add_compile_definitions(LOG_LEVEL=LOG_DEBUG)
 else ()
   add_compile_definitions(LOG_LEVEL=LOG_INFO)
