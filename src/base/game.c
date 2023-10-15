@@ -71,9 +71,9 @@ void game_tick(float delta_time)
     {
         game_tick_dynamic(delta_time);
     }
-#ifdef DEBUG_MODE
+#if _DEBUG || NDEBUG
 #ifdef _WIN32
-    if (GetFileModTime("fl") > 10 + last_dll_write_time)
+    if (GetFileModTime("fl") != last_dll_write_time)
     {
         game_unload_code();
         game_load_code();
@@ -86,7 +86,7 @@ void game_tick(float delta_time)
         game_load_code();
     }
 #endif // __linux__ || __APPLE__
-#endif // DEBUG_MODE
+#endif // _DEBUG || NDEBUG
 }
 
 void game_terminate(void)

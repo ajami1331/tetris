@@ -49,14 +49,12 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR} src/shared)
 
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
   add_compile_definitions(LOG_LEVEL=LOG_DEBUG)
-  add_compile_definitions(DEBUG_MODE)
 else ()
   add_compile_definitions(LOG_LEVEL=LOG_INFO)
 endif()
 
 if (MSVC)
   add_compile_definitions(LOG_LEVEL=LOG_DEBUG)
-  add_compile_definitions(DEBUG_MODE)
 endif()
 
 # Web Configurations

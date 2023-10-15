@@ -25,13 +25,17 @@ add_library(game SHARED ${SOURCES})
 target_link_libraries(game raylib)
 
 if (MSVC)
+  add_custom_command(TARGET game PRE_BUILD
+                    COMMAND ${CMAKE_COMMAND} -E rm -rf ${CMAKE_BINARY_DIR}/pdb)
+  add_custom_command(TARGET game POST_BUILD
+                    COMMAND ${CMAKE_COMMAND} -E sleep 0.1)
   add_custom_command(TARGET game POST_BUILD
                     COMMAND ${CMAKE_COMMAND} -E touch -f $<TARGET_FILE_DIR:game>/fl)
   add_compile_definitions(LOG_LEVEL=LOG_DEBUG)
-  add_compile_definitions(DEBUG_MODE)
   string(RANDOM LENGTH 10 ALPHABET 0123456789 PROJECT_ID)
   set_target_properties(game PROPERTIES COMPILE_PDB_NAME game-${PROJECT_ID})
   set_target_properties(game PROPERTIES PDB_NAME game-${PROJECT_ID}-1)
+  set_target_properties(game PROPERTIES PDB_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/pdb)
   message(STATUS "PDB file name: game-${PROJECT_ID}.pdb")
   add_custom_command(TARGET game POST_BUILD
                     COMMAND ${CMAKE_COMMAND} -E touch ${CMAKE_CURRENT_SOURCE_DIR}/CMakeLists.txt)
