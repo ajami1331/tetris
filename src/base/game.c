@@ -47,7 +47,7 @@ void game_load_code(void)
     *(void **) (&game_init_dynamic) = dlsym(handle, "game_init");
     *(void **) (&game_tick_dynamic) = dlsym(handle, "game_tick");
     *(void **) (&game_terminate_dynamic) = dlsym(handle, "game_terminate");
-    *(int **) (&game_should_continue_dynamic) = dlsym(handle, "game_should_continue");
+    *(void **) (&game_should_continue_dynamic) = dlsym(handle, "game_should_continue");
     *(void **) (&game_load_code_dynamic) = dlsym(handle, "game_load_code");
     *(void **) (&game_unload_code_dynamic) = dlsym(handle, "game_unload_code");
 #endif // __linux__ || __APPLE__
