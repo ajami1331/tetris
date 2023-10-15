@@ -64,9 +64,9 @@ DWORD GetFileModTime(const char *path)
 void game_load_code(void)
 {
 #ifdef _WIN32
+#ifdef __MINGW32__
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wcast-function-type"
-#ifdef __MINGW32__
     CopyFileA(GAME_CODE_LIB, "game1.dll", 0);
 #else
     CopyFile(GAME_CODE_LIB, "game1.dll", 0);
@@ -79,7 +79,9 @@ void game_load_code(void)
     game_should_continue_dynamic = (game_should_continue_t)GetProcAddress(handle, "game_should_continue");
     game_load_code_dynamic = (game_load_code_t)GetProcAddress(handle, "game_load_code");
     game_unload_code_dynamic = (game_unload_code_t)GetProcAddress(handle, "game_unload_code");
+#ifdef __MINGW32__
 #pragma GCC diagnostic pop
+#endif // __MINGW32__
 #endif // _WIN32
 #if __linux__ || __APPLE__
     handle = dlopen(GAME_CODE_LIB, RTLD_LAZY);
