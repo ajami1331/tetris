@@ -4,7 +4,7 @@ project(tetris VERSION 0.1.0 LANGUAGES C)
 # Generate compile_commands.json
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
@@ -76,7 +76,7 @@ else()
 endif()
 
 if (NOT CMAKE_BUILD_TYPE STREQUAL "Debug" AND NOT MSVC)
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3 -static")
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3")
 endif()
 
 # Checks if OSX and links appropriate frameworks (Only required on MacOS)
