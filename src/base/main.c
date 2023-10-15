@@ -25,7 +25,7 @@ int main(void)
     }
 #endif
 
-    game_terminate();
+    game_shutdown();
 
     return 0;
 }

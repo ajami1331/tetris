@@ -42,7 +42,7 @@ void draw_game_area_border(void)
     
 }
 
-void game_terminate(void)
+void game_shutdown(void)
 {
     CloseWindow();
 }
@@ -58,4 +58,17 @@ void game_load_code(void)
 
 void game_unload_code(void)
 {
+}
+
+
+game_code_t* game_get_code(void)
+{
+    static game_code_t game_code = {0};
+    game_code.init = game_init;
+    game_code.tick = game_tick;
+    game_code.shutdown = game_shutdown;
+    game_code.should_continue = game_should_continue;
+    game_code.load_code = game_load_code;
+    game_code.unload_code = game_unload_code;
+    return &game_code;
 }
