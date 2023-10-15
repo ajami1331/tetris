@@ -9,7 +9,7 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 if (CMAKE_COMPILER_IS_GNUCC)
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
+  add_compile_definitions(-fPIC)
   message(STATUS "CMAKE_C_FLAGS: ${CMAKE_C_FLAGS}")
 endif()
 
@@ -17,6 +17,7 @@ add_subdirectory(src/game)
 
 # Dependencies
 set(RAYLIB_VERSION 4.5.0)
+set(BUILD_SHARED_LIBS ON CACHE BOOL "" FORCE)
 find_package(raylib ${RAYLIB_VERSION} QUIET) # QUIET or REQUIRED
 if (NOT raylib_FOUND) # If there's none, fetch and build raylib
   include(FetchContent)

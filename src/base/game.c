@@ -26,7 +26,7 @@ game_load_code_t game_load_code_dynamic;
 game_unload_code_t game_unload_code_dynamic;
 int last_dll_write_time = 0;
 
-void unload_game_code(void);
+void game_unload_code(void);
 
 void game_load_code(void)
 {
@@ -75,14 +75,14 @@ void game_tick(float delta_time)
 #ifdef _WIN32
     if (GetFileModTime("fl") > 10 + last_dll_write_time)
     {
-        unload_game_code();
+        game_unload_code();
         game_load_code();
     }
 #endif // _WIN32
 #if __linux__ || __APPLE__
     if (GetFileModTime("./libgame.so") != last_dll_write_time)
     {
-        unload_game_code();
+        game_unload_code();
         game_load_code();
     }
 #endif // __linux__ || __APPLE__
@@ -116,7 +116,7 @@ int game_should_continue(void)
     return 0;
 }
 
-void unload_game_code(void)
+void game_unload_code(void)
 {    
     if (game_unload_code_dynamic)
     {

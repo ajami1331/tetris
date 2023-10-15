@@ -54,12 +54,8 @@ int game_should_continue(void)
 
 void game_load_code(void)
 {
-    InitWindow(480, 880, "tetris");
-
-    SetTargetFPS(60);
 }
 
 void game_unload_code(void)
 {
-    CloseWindow();
 }
