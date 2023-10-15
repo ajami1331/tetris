@@ -52,6 +52,8 @@ DWORD GetFileModTime(const char *path)
 void game_load_code(void)
 {
 #ifdef _WIN32
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wcast-function-type"
     CopyFile("game.dll", "game1.dll", 0);
     handle = LoadLibraryA("game1.dll");
     last_dll_write_time = GetFileModTime("fl");
@@ -61,16 +63,17 @@ void game_load_code(void)
     game_should_continue_dynamic = (game_should_continue_t)GetProcAddress(handle, "game_should_continue");
     game_load_code_dynamic = (game_load_code_t)GetProcAddress(handle, "game_load_code");
     game_unload_code_dynamic = (game_unload_code_t)GetProcAddress(handle, "game_unload_code");
+#pragma GCC diagnostic pop
 #endif // _WIN32
 #if __linux__ || __APPLE__
     handle = dlopen("./libgame.so", RTLD_LAZY);
     last_dll_write_time = GetFileModTime("./libgame.so");
-    *(void **) (&game_init_dynamic) = dlsym(handle, "game_init");
-    *(void **) (&game_tick_dynamic) = dlsym(handle, "game_tick");
-    *(void **) (&game_terminate_dynamic) = dlsym(handle, "game_terminate");
-    *(void **) (&game_should_continue_dynamic) = dlsym(handle, "game_should_continue");
-    *(void **) (&game_load_code_dynamic) = dlsym(handle, "game_load_code");
-    *(void **) (&game_unload_code_dynamic) = dlsym(handle, "game_unload_code");
+    *(void **)(&game_init_dynamic) = dlsym(handle, "game_init");
+    *(void **)(&game_tick_dynamic) = dlsym(handle, "game_tick");
+    *(void **)(&game_terminate_dynamic) = dlsym(handle, "game_terminate");
+    *(void **)(&game_should_continue_dynamic) = dlsym(handle, "game_should_continue");
+    *(void **)(&game_load_code_dynamic) = dlsym(handle, "game_load_code");
+    *(void **)(&game_unload_code_dynamic) = dlsym(handle, "game_unload_code");
 #endif // __linux__ || __APPLE__
     if (game_load_code_dynamic)
     {
@@ -138,12 +141,12 @@ int game_should_continue(void)
 }
 
 void game_unload_code(void)
-{    
+{
     if (game_unload_code_dynamic)
     {
         game_unload_code_dynamic();
     }
-    
+
     if (handle)
     {
 #ifdef _WIN32
