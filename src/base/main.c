@@ -8,6 +8,10 @@ int main(void)
 {
     SetTraceLogLevel(LOG_LEVEL);
 
+#if _DEBUG || DEBUG_MODE
+    TraceLog(LOG_INFO, "Debug build!");
+#endif // _DEBUG || DEBUG_MODE
+
     game_load_code();
 
     game_init();
