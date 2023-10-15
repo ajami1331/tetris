@@ -13,8 +13,6 @@ if (CMAKE_COMPILER_IS_GNUCC)
   message(STATUS "CMAKE_C_FLAGS: ${CMAKE_C_FLAGS}")
 endif()
 
-add_subdirectory(src/game)
-
 # Dependencies
 set(RAYLIB_VERSION 4.5.0)
 set(BUILD_SHARED_LIBS ON CACHE BOOL "" FORCE)
@@ -55,6 +53,7 @@ endif()
 
 if (MSVC)
   add_compile_definitions(LOG_LEVEL=LOG_DEBUG)
+  target_compile_options(${PROJECT_NAME} PRIVATE /W4 /WX)
 endif()
 
 # Web Configurations
@@ -83,3 +82,6 @@ if (APPLE)
     target_link_libraries(${PROJECT_NAME} "-framework Cocoa")
     target_link_libraries(${PROJECT_NAME} "-framework OpenGL")
 endif()
+
+
+add_subdirectory(src/game)

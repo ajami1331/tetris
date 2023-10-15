@@ -2,6 +2,7 @@
 #ifdef _WIN32
 #include <windows.h>
 #include <shlwapi.h>
+#include <stdio.h>
 HMODULE handle;
 #endif // _WIN32
 
@@ -24,9 +25,29 @@ game_terminate_t game_terminate_dynamic;
 game_should_continue_t game_should_continue_dynamic;
 game_load_code_t game_load_code_dynamic;
 game_unload_code_t game_unload_code_dynamic;
-int last_dll_write_time = 0;
 
 void game_unload_code(void);
+
+#if __linux__ || __APPLE__
+int last_dll_write_time = 0;
+#endif // __linux__ || __APPLE__
+
+#ifdef _WIN32
+
+DWORD last_dll_write_time = 0;
+
+DWORD GetFileModTime(const char *path)
+{
+    FILETIME last_write_time = {0};
+    HANDLE file = CreateFileA(path, GENERIC_READ, FILE_SHARE_READ, 0, OPEN_EXISTING, 0, 0);
+    if (file != INVALID_HANDLE_VALUE)
+    {
+        GetFileTime(file, 0, 0, &last_write_time);
+        CloseHandle(file);
+    }
+    return last_write_time.dwLowDateTime;
+}
+#endif // _WIN32
 
 void game_load_code(void)
 {
