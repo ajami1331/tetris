@@ -15,7 +15,9 @@ endif()
 
 # Dependencies
 set(RAYLIB_VERSION 4.5.0)
-set(BUILD_SHARED_LIBS ON CACHE BOOL "" FORCE)
+if (NOT ${PLATFORM} STREQUAL "Web")
+  set(BUILD_SHARED_LIBS ON CACHE BOOL "" FORCE)
+endif()
 find_package(raylib ${RAYLIB_VERSION} QUIET) # QUIET or REQUIRED
 if (NOT raylib_FOUND) # If there's none, fetch and build raylib
   include(FetchContent)
@@ -34,10 +36,10 @@ endif()
 
 # Our Project
 if (NOT ${PLATFORM} STREQUAL "Web")
-  file(GLOB_RECURSE SOURCES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} src/base/*)
+  file(GLOB_RECURSE SOURCES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} src/main.c src/base/*.c src/base/*.h)
   add_executable(${PROJECT_NAME} ${SOURCES})
 else()
-  file(GLOB_RECURSE SOURCES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} src/base/* src/game/*)
+  file(GLOB_RECURSE SOURCES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} src/main.c src/game/*.c src/game/*.h)
   add_executable(${PROJECT_NAME} ${SOURCES})
 endif()
 #set(raylib_VERBOSE 1)

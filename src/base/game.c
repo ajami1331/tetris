@@ -7,10 +7,6 @@
 HMODULE handle;
 #endif // _WIN32
 
-#ifdef PLATFORM_WEB
-#include "../game/game.h"
-#endif // PLATFORM_WEB
-
 #if __linux__ || __APPLE__
 #include <dlfcn.h>
 #include <raylib.h>
@@ -80,9 +76,6 @@ void game_load_code(void)
     last_dll_write_time = GetFileModTime(GAME_CODE_LIB);
     *(void **)(&game_get_code_dynamic)  = dlsym(handle, "game_get_code");
 #endif // __linux__ || __APPLE__
-#ifdef PLATFORM_WEB
-    game_code = game_get_code();
-#endif // PLATFORM_WEB
     game_code = game_get_code_dynamic();
     game_code->load_code();
 }
@@ -143,6 +136,6 @@ void game_unload_code(void)
 #if __linux__ || __APPLE__
         dlclose(handle);
 #endif // __linux__ || __APPLE__
-        game_code = 0;
     }
+    game_code = 0;
 }

@@ -1,8 +1,10 @@
 #include "raylib.h"
 #if defined(PLATFORM_WEB)
 #include <emscripten/emscripten.h>
+#include "game/game.h"
+#else
+#include "base/game.h"
 #endif
-#include "game.h"
 
 int main(void)
 {
