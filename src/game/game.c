@@ -12,7 +12,10 @@ void draw_game_area_border(void);
 void create_tetrimino(void);
 
 game_state_t *game_state = 0;
-float fast_drop_rate = 0.25f;
+float move_rate = 0.10f;
+float move_timer = 0.0f;
+float fast_drop_rate = 0.10f;
+float normal_drop_rate = 0.55f;
 float drop_rate = 0.55f;
 float drop_timer = 0.0f;
 
@@ -40,6 +43,60 @@ bool check_tetrimino_collide_y(void)
         }
     }
     return true;
+}
+
+bool check_tetrimino_collide_x(int d)
+{
+    for (int i = 0; i < 4; i++)
+    {
+        for (int j = 0; j < 4; j++)        
+        {            
+            if (!game_state->current_tetrimino.blocks[i][j])
+            {
+                continue;
+            }
+            int x = (game_state->current_tetrimino.x + i) + d;
+            int y = (game_state->current_tetrimino.y + j);
+            if (x <= 0 || x > 10)
+            {
+                return false;
+            }
+            if (game_state->blocks[x][y])
+            {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+void swap_char(char *x, char *y)
+{
+    char temp = *x;
+    *x = *y;
+    *y = temp;
+}
+
+void reverse_array_char(char *arr, int n)
+{
+    for (int i = 0, j = n - 1; i < j; i++, j--)
+    {
+        swap_char(&arr[i], &arr[j]);
+    }
+}
+
+void rotate_tetrimino()
+{
+    for (int i = 0; i < 4; i++) {
+        for (int j = i; j < 4; j++) {
+            swap_char(&game_state->current_tetrimino.blocks[i][j], &game_state->current_tetrimino.blocks[j][i]);
+        }
+    }
+ 
+    for (int i = 0; i < 4; i++) 
+    {
+        reverse_array_char(game_state->current_tetrimino.blocks[i], 4);
+    }
 }
 
 void create_tetrimino(void)
@@ -123,10 +180,38 @@ void game_tick(void)
 
     ClearBackground(RAYWHITE);
 
-    DrawText("Hello World!", 190, 200, 20, LIGHTGRAY);
-    
-    draw_game_area_border();
-    
+    if (IsKeyReleased(KEY_UP))
+    {
+        rotate_tetrimino();
+    }
+
+    move_timer += GetFrameTime();
+   
+    if (move_timer >= move_rate)
+    {
+        move_timer = 0.0f;
+        if (IsKeyDown(KEY_LEFT) && check_tetrimino_collide_x(-1))
+        {
+            game_state->current_tetrimino.x -= 1;
+        }
+
+        if (IsKeyDown(KEY_RIGHT) && check_tetrimino_collide_x(1))
+        {
+            game_state->current_tetrimino.x += 1;
+        }
+
+        
+    }
+
+    if (IsKeyDown(KEY_DOWN))
+    {
+        drop_rate = fast_drop_rate;
+    }
+    else
+    {
+        drop_rate = normal_drop_rate;
+    }
+
     drop_timer += GetFrameTime();
 
     if (drop_timer >= drop_rate && check_tetrimino_collide_y())
@@ -136,6 +221,8 @@ void game_tick(void)
     }    
     
     draw_current_tetrimino();
+
+    draw_game_area_border();
 
     EndDrawing();
 }
