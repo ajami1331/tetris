@@ -53,8 +53,9 @@ DWORD GetFileModTime(const char *path)
 #endif // _WIN32
 
 game_code_t *game_code = 0;
+game_state_t *game_state = 0;
 
-void game_load_code(void)
+void game_load_code(game_state_t *state)
 {
 #ifdef _WIN32
 #ifdef __MINGW32__
@@ -77,12 +78,13 @@ void game_load_code(void)
     *(void **)(&game_get_code_dynamic)  = dlsym(handle, "game_get_code");
 #endif // __linux__ || __APPLE__
     game_code = game_get_code_dynamic();
-    game_code->load_code();
+    game_code->load_code(state);
 }
 
-void game_init(void)
+void game_init(game_state_t *state)
 {
-    game_code->init();
+    game_state = state;
+    game_code->init(game_state);
 }
 
 void game_tick(void)
@@ -93,14 +95,14 @@ void game_tick(void)
     if (GetFileModTime("fl") != last_dll_write_time)
     {
         game_unload_code();
-        game_load_code();
+        game_load_code(game_state);
     }
 #endif // _WIN32
 #if __linux__ || __APPLE__
     if (GetFileModTime(GAME_CODE_LIB) != last_dll_write_time)
     {
         game_unload_code();
-        game_load_code();
+        game_load_code(game_state);
     }
 #endif // __linux__ || __APPLE__
 #endif // _DEBUG || DEBUG_MODE
